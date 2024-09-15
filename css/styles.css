@@ -45,3 +45,14 @@ article {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
 }
+
+footer {
+    background-color: #6465AD;
+    padding: 10px 0;
+    text-align: center;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
