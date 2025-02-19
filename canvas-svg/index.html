@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas to SVG and Extract Coordinates</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        canvas {
+            border: 1px solid black;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Draw on the Canvas</h1>
+    <canvas id="drawingCanvas" width="400" height="400"></canvas>
+    <h2>SVG Drawing</h2>
+    <div id="svgContainer"></div>
+    <h2>Extracted Coordinates</h2>
+    <pre id="coordinates"></pre>
+
+    <script>
+        // Initialize the fabric canvas
+        const canvas = new fabric.Canvas('drawingCanvas');
+
+        // Set some drawing properties
+        canvas.isDrawingMode = true;
+        canvas.freeDrawingBrush.width = 5;
+        canvas.freeDrawingBrush.color = '#000';
+
+        // Function to convert the drawing to SVG and extract coordinates
+        function convertCanvasToSVG() {
+            const svg = canvas.toSVG(); // Convert the canvas to SVG
+            document.getElementById('svgContainer').innerHTML = svg; // Display the SVG
+
+            // Use D3.js to extract coordinates from the SVG
+            const svgElement = d3.select('svg');
+            const paths = svgElement.selectAll('path');
+
+            // Clear previous coordinates and extract new ones
+            const coordinates = [];
+            paths.each(function (d, i) {
+                const pathData = d3.select(this).attr('d');
+                coordinates.push(pathData);
+            });
+
+            // Display extracted coordinates
+            document.getElementById('coordinates').textContent = JSON.stringify(coordinates, null, 2);
+        }
+
+        // Button to convert canvas to SVG and extract coordinates
+        const convertButton = document.createElement('button');
+        convertButton.textContent = 'Convert to SVG and Extract Coordinates';
+        document.body.appendChild(convertButton);
+
+        convertButton.addEventListener('click', convertCanvasToSVG);
+    </script>
+</body>
+
+</html>
